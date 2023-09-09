@@ -6,6 +6,7 @@ public class Enemy : MonoBehaviour
 {
     private Transform _targetPos;
     [SerializeField] private int _moveSpeed;
+    [SerializeField] public int _damageAmount;
 
     private void Start()
     {

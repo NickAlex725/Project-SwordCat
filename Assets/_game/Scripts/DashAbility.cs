@@ -6,13 +6,27 @@ public class DashAbility : MonoBehaviour
 {
     [SerializeField] private float _dashSpeed;
 
-    private bool _canMove;
+    private bool _canMove = false;
+    private bool _isDashing = false;
     private Vector2 _currentTouchPos;
     Collider2D _col;
+    Health _health;
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        Debug.Log("hit!");
+        if (collision.GetComponent<Enemy>() && !_isDashing)
+        {
+            int damageAmount = collision.GetComponent<Enemy>()._damageAmount;
+            _health.TakeDamage(damageAmount);
+            Debug.Log(damageAmount);
+        }
+    }
 
     void Start()
     {
         _col = GetComponent<Collider2D>();
+        _health = GetComponent<Health>();
     }
 
     void Update()
@@ -27,6 +41,7 @@ public class DashAbility : MonoBehaviour
                 Collider2D _touchedCollider = Physics2D.OverlapPoint(_touchPosition);
                 if(_col == _touchedCollider)
                 {
+                    Debug.Log("touched player");
                     _canMove = true;
                 }
             }
@@ -43,11 +58,24 @@ public class DashAbility : MonoBehaviour
             {
                 if(_canMove)
                 {
-                    while(transform.position.x != _currentTouchPos.x && transform.position.y != _currentTouchPos.y)
-                    {
-                        transform.position = Vector2.MoveTowards(transform.position, _currentTouchPos, _dashSpeed * Time.deltaTime);
-                    }
+                    Debug.Log("lifted finger");
+                    _isDashing = true;
+                    StartCoroutine(Dash());
+                    _isDashing = false;
+                    _canMove = false;
                 }
+            }
+        }
+    }
+
+    IEnumerator Dash()
+    {
+        if (_canMove)
+        {
+            while(transform.position.x != _currentTouchPos.x && transform.position.y != _currentTouchPos.y)
+            {
+                transform.position = Vector2.MoveTowards(transform.position, _currentTouchPos, _dashSpeed * Time.deltaTime);
+                yield return null;
             }
         }
     }
