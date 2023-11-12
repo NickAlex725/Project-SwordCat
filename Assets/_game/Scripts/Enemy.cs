@@ -15,7 +15,9 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.GetComponent<Player>())
+        _playerRb = collision.GetComponent<Rigidbody2D>();
+        _playerRb.velocity = Vector2.zero;
+        if (collision.GetComponent<Player>())
         {
             if (_currentCooldown <= 0)
             {
@@ -24,8 +26,7 @@ public class Enemy : MonoBehaviour
                 _playerHealth.TakeDamage(_damageAmount);
                 _currentCooldown = _damageCooldown;
                 //player knockback
-                _playerRb = collision.GetComponent<Rigidbody2D>();
-                _playerRb.AddForce((collision.transform.position - transform.position).normalized * _knockbackStrength, ForceMode2D.Force);
+                StartCoroutine(Knockback(_playerRb));
             }
         }
     }
@@ -43,5 +44,13 @@ public class Enemy : MonoBehaviour
         }
         //move toward player
         transform.position = Vector2.MoveTowards(transform.position, _targetPos.transform.position, _moveSpeed * Time.deltaTime);
+    }
+    private IEnumerator Knockback(Rigidbody2D _rb)
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            _playerRb.AddForce((_rb.transform.position - transform.position).normalized * _knockbackStrength, ForceMode2D.Force);
+            yield return new WaitForSeconds(0.01f);
+        }
     }
 }

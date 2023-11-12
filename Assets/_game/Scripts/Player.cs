@@ -2,13 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] InputAction _playerMovement;
-    [SerializeField] InputAction _playerDash;
+    [SerializeField] Image _dashCD;
     [SerializeField] float _moveSpeed;
     [SerializeField] int _dashForce;
+    [SerializeField] float _dashCooldown;
+    [SerializeField] InputAction _playerMovement;
+    [SerializeField] InputAction _playerDash;
+    private float _currentDashCooldown;
     private Rigidbody2D _rb;
     private Vector2 _moveDirection;
     
@@ -34,6 +38,11 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        if(_currentDashCooldown > 0)
+        {
+            _currentDashCooldown -= Time.deltaTime;
+            _dashCD.fillAmount = 1 - (_currentDashCooldown / _dashCooldown);
+        }
         //WASD movement
         _moveDirection = _playerMovement.ReadValue<Vector2>();
         _rb.velocity = new Vector2(_moveDirection.x * _moveSpeed, _moveDirection.y * _moveSpeed);
@@ -46,10 +55,11 @@ public class Player : MonoBehaviour
     {
         if(context.ReadValueAsButton())
         {
-            //_rb.AddForce(_moveDirection * _dashForce, ForceMode2D.Force);
-            //_rb.position = _moveDirection * _dashForce;
-            //_rb.MovePosition(_moveDirection * _dashForce);
-            StartCoroutine(Dash());
+            if (_currentDashCooldown <= 0)
+            {
+                _currentDashCooldown = _dashCooldown;
+                StartCoroutine(Dash());
+            }
         }
     }
     private IEnumerator Dash()
