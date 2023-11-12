@@ -10,7 +10,7 @@ public class Enemy : MonoBehaviour
 
     private void Start()
     {
-        _targetPos = FindAnyObjectByType<DashAbility>().GetComponent<Transform>();
+        //_targetPos = FindAnyObjectByType<DashAbility>().GetComponent<Transform>();
     }
     private void Update()
     {

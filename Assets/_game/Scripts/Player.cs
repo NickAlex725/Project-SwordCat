@@ -5,39 +5,59 @@ using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] private float _moveSpeed;
-    [SerializeField] private float _dashForce;
-    private PlayerInput _inputs;
+    [SerializeField] InputAction _playerMovement;
+    [SerializeField] InputAction _playerDash;
+    [SerializeField] float _moveSpeed;
+    [SerializeField] int _dashForce;
     private Rigidbody2D _rb;
+    private Vector2 _moveDirection;
+    
 
-    // Start is called before the first frame update
-    void Awake()
+    private void OnEnable()
     {
-        _inputs = GetComponent<PlayerInput>();
+        //needed for input to work
+        _playerMovement.Enable();
+        _playerDash.Enable();
+    }
+
+    private void OnDisable()
+    {
+        //needed for input to work
+       _playerMovement.Disable();
+       _playerDash.Disable();
+    }
+
+    private void Start()
+    {
         _rb = GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        if(_inputs.actions["Move"].triggered)
-        {
-            Debug.Log("move action");
-        }
+        //WASD movement
+        _moveDirection = _playerMovement.ReadValue<Vector2>();
+        _rb.velocity = new Vector2(_moveDirection.x * _moveSpeed, _moveDirection.y * _moveSpeed);
 
-        if (_inputs.actions["Dash"].triggered)
-        {
-            Debug.Log("dash action");
-        }
+        //Dash attack
+        _playerDash.performed += PlayerDash;
     }
 
-    private void OnMove(InputValue value)
+    private void PlayerDash(InputAction.CallbackContext context)
     {
-        _rb.velocity = value.Get<Vector2>() * _moveSpeed;
+        if(context.ReadValueAsButton())
+        {
+            //_rb.AddForce(_moveDirection * _dashForce, ForceMode2D.Force);
+            //_rb.position = _moveDirection * _dashForce;
+            //_rb.MovePosition(_moveDirection * _dashForce);
+            StartCoroutine(Dash());
+        }
     }
-
-    private void OnDash(InputValue value)
+    private IEnumerator Dash()
     {
-        _rb.AddForce(value.Get<Vector2>() * _dashForce, ForceMode2D.Force);
+        for (int i = 0; i < 25; i++)
+        {
+            _rb.AddForce(_moveDirection * _dashForce, ForceMode2D.Force);
+            yield return new WaitForSeconds(0.01f);
+        }
     }
 }
