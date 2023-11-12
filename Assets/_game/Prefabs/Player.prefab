@@ -12,10 +12,8 @@ GameObject:
   - component: {fileID: 653067871880532494}
   - component: {fileID: 5846191479991487359}
   - component: {fileID: 4402438008034498308}
-  - component: {fileID: 5885156103460420146}
   - component: {fileID: 7767551247157486590}
   - component: {fileID: 5646225328913626262}
-  - component: {fileID: 4602460114966561792}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -103,7 +101,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 0
+  m_LinearDrag: 10
   m_AngularDrag: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 0}
@@ -162,36 +160,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &5885156103460420146
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7086782609039429206}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: 59d77cee79b811f46aad3ae1ea45c5a1, type: 3}
-  m_NotificationBehavior: 0
-  m_UIInputModule: {fileID: 0}
-  m_DeviceLostEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_DeviceRegainedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ControlsChangedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ActionEvents: []
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
-  m_DefaultActionMap: Player
-  m_SplitScreenIndex: -1
-  m_Camera: {fileID: 0}
 --- !u!114 &7767551247157486590
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -204,7 +172,74 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce7251814d411f742a99610e537fae57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _moveSpeed: 2
+  _playerMovement:
+    m_Name: Player Movement
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 326f1650-99d8-4cc5-bd24-a41d978f0b33
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: Movement
+      m_Id: d496419d-ca6f-4cd3-9e1f-4db7d46fc5c2
+      m_Path: 2DVector
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Player Movement
+      m_Flags: 4
+    - m_Name: up
+      m_Id: aa103dcb-b724-4187-9402-2cabae6fcf24
+      m_Path: <Keyboard>/w
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Player Movement
+      m_Flags: 8
+    - m_Name: down
+      m_Id: 53da35c6-07b3-400c-ac72-14eafa415289
+      m_Path: <Keyboard>/s
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Player Movement
+      m_Flags: 8
+    - m_Name: left
+      m_Id: 5d29632e-ae3a-4b8b-9829-13ca768dc2a3
+      m_Path: <Keyboard>/a
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Player Movement
+      m_Flags: 8
+    - m_Name: right
+      m_Id: 72d68d3d-c937-4c85-93f8-5f6411193275
+      m_Path: <Keyboard>/d
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Player Movement
+      m_Flags: 8
+    m_Flags: 0
+  _playerDash:
+    m_Name: Player Dash
+    m_Type: 1
+    m_ExpectedControlType: Button
+    m_Id: 3a3cb081-3643-4af0-8b5e-c22a02416c65
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: cefcfd0c-6e03-4260-aad0-84fea70c70a8
+      m_Path: <Mouse>/leftButton
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Player Dash
+      m_Flags: 0
+    m_Flags: 0
+  _moveSpeed: 5
+  _dashForce: 500
 --- !u!114 &5646225328913626262
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -219,16 +254,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _maxHealth: 100
   _currentHealth: 0
---- !u!114 &4602460114966561792
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7086782609039429206}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 88bf197dc550974429a33e69ca1fc7d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _dashSpeed: 1
