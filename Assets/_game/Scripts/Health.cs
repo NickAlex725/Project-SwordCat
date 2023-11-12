@@ -6,7 +6,6 @@ public class Health : MonoBehaviour
 {
     [SerializeField] int _maxHealth;
 
-
     public int _currentHealth;
 
     private void Start()
