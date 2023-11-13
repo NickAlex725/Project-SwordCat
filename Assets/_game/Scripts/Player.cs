@@ -65,7 +65,7 @@ public class Player : MonoBehaviour
         }
 
         //counting down cd if needed
-        if (_currentDashCooldown > 0)
+        if (_currentDashCooldown >= 0)
         {
             _currentDashCooldown -= Time.deltaTime;
             _dashCD.fillAmount = 1 - (_currentDashCooldown / _dashCooldown);
@@ -101,46 +101,44 @@ public class Player : MonoBehaviour
     private void Attack()
     {
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(_attackPoint.position, _attackRange);
-        foreach (Collider2D enemy in hitEnemies)
+        foreach (Collider2D enemyCol in hitEnemies)
         {
-            if (enemy.GetComponent<Enemy>() && _canDoDamage)
+            var enemy = enemyCol.GetComponent<Enemy>();
+            if (enemyCol.GetComponent<Enemy>() && _canDoDamage)
             {
-                var enemyHealth = enemy.GetComponent<Health>();
+                var enemyHealth = enemyCol.GetComponent<Health>();
                 enemyHealth.TakeDamage(_currentDamage);
+                _currentDashCooldown = 0; //reset cooldown
                 _canDoDamage = false;
+            }
 
-                //checking if we killed the enemy
-                if(!enemy.isActiveAndEnabled)
+            //checking if we killed the enemy
+            if(!enemyCol.isActiveAndEnabled)
+            {
+                //get enemy level and check if we should increase player damage
+                if(enemy.GetEnemyLevel() == 1 && _currentDamage == 1)
                 {
-                    //get enemy level and check if we should increase player damage
-                    var enemyLevel = enemy.GetComponent<Enemy>();
-                    if(enemyLevel.GetEnemyLevel() == 1 && _currentDamage == 1)
-                    {
-                        _currentDamage = 101;
-                    }
-                    else if(enemyLevel.GetEnemyLevel() == 2 && _currentDamage == 101)
-                    {
-                        _currentDamage = 201;
-                    }
+                    _currentDamage = 101;
+                }
+                else if(enemy.GetEnemyLevel() == 2 && _currentDamage == 101)
+                {
+                    _currentDamage = 201;
                 }
             }
+            
         }
     }
 
     private void PlayerDash(InputAction.CallbackContext context)
     {
-        if(context.ReadValueAsButton())
+        if(context.ReadValueAsButton() && _currentDashCooldown <= 0)
         {
-            if (_currentDashCooldown <= 0)
-            {
-                //start cd
-                _currentDashCooldown = _dashCooldown;
-                //play animation
-                //_catAnimator.SetTrigger("Dash");
-                _catAnimator.Play("SwordCat_Dash", 0, 0);
-                //dash coroutine
-                StartCoroutine(Dash());
-            }
+            //start cd
+            _currentDashCooldown = _dashCooldown;
+            //play animation
+            _catAnimator.Play("SwordCat_Dash", 0, 0);
+            //dash coroutine
+            StartCoroutine(Dash());
         }
     }
     private IEnumerator Dash()
