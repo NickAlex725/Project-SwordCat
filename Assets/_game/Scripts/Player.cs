@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -31,7 +32,10 @@ public class Player : MonoBehaviour
     private int _currentDamage = 1;
     private bool _facingLeft = true;
     private bool _canDoDamage; // ensures that you don't do multiple times a frame
-    
+
+    public bool attackChain2 = false;
+    public bool attackChain3 = false;
+    public Collider2D hitbox;
 
     private void OnEnable()
     {
@@ -76,14 +80,7 @@ public class Player : MonoBehaviour
         _rb.velocity = new Vector2(_moveDirection.x * _moveSpeed, _moveDirection.y * _moveSpeed);
 
         //play walking animation
-        if(_rb.velocity != Vector2.zero)
-        {
-            _catAnimator.SetFloat("speed", 1);
-        }
-        else
-        {
-            _catAnimator.SetFloat("speed", 0);
-        }
+        _catAnimator.SetFloat("speed", _rb.velocity.magnitude);
 
         //Dash attack
         _playerDash.performed += PlayerDash;
@@ -125,9 +122,10 @@ public class Player : MonoBehaviour
                     _currentDamage = 201;
                 }
             }
-            
         }
     }
+
+
 
     private void PlayerDash(InputAction.CallbackContext context)
     {
