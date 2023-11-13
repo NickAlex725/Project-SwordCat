@@ -29,6 +29,7 @@ public class Player : MonoBehaviour
     private Rigidbody2D _rb;
     private Vector2 _moveDirection;
     private int _currentDamage = 1;
+    private bool _facingLeft = true;
     private bool _canDoDamage; // ensures that you don't do multiple times a frame
     
 
@@ -53,6 +54,16 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        //make sure player is facing the right way
+        if(_moveDirection.x > 0 && _facingLeft)
+        {
+            Flip();
+        }
+        else if(_moveDirection.x < 0 && !_facingLeft)
+        {
+            Flip();
+        }
+
         //counting down cd if needed
         if (_currentDashCooldown > 0)
         {
@@ -76,6 +87,15 @@ public class Player : MonoBehaviour
 
         //Dash attack
         _playerDash.performed += PlayerDash;
+    }
+
+    private void Flip()
+    {
+        Vector3 currentScale = gameObject.transform.localScale;
+        currentScale.x *= -1;
+        gameObject.transform.localScale = currentScale;
+
+        _facingLeft = !_facingLeft;
     }
 
     private void Attack()
