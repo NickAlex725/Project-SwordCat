@@ -52,8 +52,13 @@ public class Enemy : MonoBehaviour
         {
             _currentCooldown -= Time.deltaTime;
         }
-        //move toward player
-        _enemyRB.position = Vector2.MoveTowards(_enemyRB.position, _playerRb.position, _moveSpeed * Time.deltaTime);
+
+        //checks if player is still alive
+        if(_playerRb != null)
+        {
+            //move toward player
+            _enemyRB.position = Vector2.MoveTowards(_enemyRB.position, _playerRb.position, _moveSpeed * Time.deltaTime);
+        }
     }
     private IEnumerator Knockback(Rigidbody2D _rb)
     {
