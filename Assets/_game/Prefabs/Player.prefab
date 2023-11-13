@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4335629716475481916
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6085818149586557784}
+  m_Layer: 0
+  m_Name: AttackPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6085818149586557784
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4335629716475481916}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 190489492419289716}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7086782609039429206
 GameObject:
   m_ObjectHideFlags: 0
@@ -35,6 +66,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1377850494493194329}
+  - {fileID: 6085818149586557784}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &653067871880532494
@@ -177,6 +209,9 @@ MonoBehaviour:
   _moveSpeed: 5
   _dashForce: 500
   _dashCooldown: 3
+  _attackPoint: {fileID: 0}
+  _attackRange: -0.44
+  _catAnimator: {fileID: 2453798653770487619}
   _playerMovement:
     m_Name: Player Movement
     m_Type: 0
@@ -275,7 +310,6 @@ MonoBehaviour:
       m_Action: Player Dash
       m_Flags: 0
     m_Flags: 0
-  _catAnimator: {fileID: 2453798653770487619}
 --- !u!114 &5646225328913626262
 MonoBehaviour:
   m_ObjectHideFlags: 0

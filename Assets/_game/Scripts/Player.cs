@@ -6,16 +6,29 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
+    [Header("UI")]
     [SerializeField] Image _dashCD;
+
+    [Header("Player Attributes")]
     [SerializeField] float _moveSpeed;
     [SerializeField] int _dashForce;
     [SerializeField] float _dashCooldown;
+
+    [Header("Combat Attributes")]
+    [SerializeField] Transform _attackPoint;
+    [SerializeField] float _attackRange;
+
+    [Header("Animator")]
+    [SerializeField] Animator _catAnimator;
+
+    [Header("Input Actions")]
     [SerializeField] InputAction _playerMovement;
     [SerializeField] InputAction _playerDash;
-    [SerializeField] Animator _catAnimator;
+
     private float _currentDashCooldown;
     private Rigidbody2D _rb;
     private Vector2 _moveDirection;
+    private int _currentDamage = 1;
     
 
     private void OnEnable()
@@ -39,7 +52,7 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        if(_currentDashCooldown > 0)
+        if (_currentDashCooldown > 0)
         {
             _currentDashCooldown -= Time.deltaTime;
             _dashCD.fillAmount = 1 - (_currentDashCooldown / _dashCooldown);
@@ -63,6 +76,19 @@ public class Player : MonoBehaviour
         _playerDash.performed += PlayerDash;
     }
 
+    private void Attack()
+    {
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(_attackPoint.position, _attackRange);
+        foreach (Collider2D enemy in hitEnemies)
+        {
+            if (enemy.GetComponent<Enemy>())
+            {
+                var enemyHealth = enemy.GetComponent<Health>();
+                enemyHealth.TakeDamage(_currentDamage);
+            }
+        }
+    }
+
     private void PlayerDash(InputAction.CallbackContext context)
     {
         if(context.ReadValueAsButton())
@@ -82,8 +108,19 @@ public class Player : MonoBehaviour
     {
         for (int i = 0; i < 25; i++)
         {
+            //attack while dashing
+            Attack();
+            //dashing
             _rb.AddForce(_moveDirection * _dashForce, ForceMode2D.Force);
             yield return new WaitForSeconds(0.01f);
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        //visual for attack circle
+        if (_attackPoint == null)
+            return;
+        Gizmos.DrawWireSphere(_attackPoint.position, _attackRange);
     }
 }
