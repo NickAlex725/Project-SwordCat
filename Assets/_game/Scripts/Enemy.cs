@@ -13,17 +13,28 @@ public class Enemy : MonoBehaviour
     private float _currentCooldown;
     private Rigidbody2D _playerRb;
     private Health _playerHealth;
+    private Rigidbody2D _enemyRB;
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void Start()
     {
-        _playerRb = collision.GetComponent<Rigidbody2D>();
-        _playerRb.velocity = Vector2.zero;
-        if (collision.GetComponent<Player>())
+        _enemyRB = gameObject.GetComponent<Rigidbody2D>();
+        //find player location
+        _targetPos = FindAnyObjectByType<Player>().GetComponent<Transform>();
+
+
+        //get player components
+        _playerRb = FindAnyObjectByType<Player>().GetComponent<Rigidbody2D>();
+        _playerHealth = FindAnyObjectByType<Player>().GetComponent<Health>();
+    }
+    
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        //_playerRb.velocity = Vector2.zero; //what does this do?
+        if (collision.gameObject.tag == "Player")
         {
             if (_currentCooldown <= 0)
             {
                 //do damage
-                _playerHealth = collision.GetComponent<Health>();
                 _playerHealth.TakeDamage(_damageAmount);
                 _currentCooldown = _damageCooldown;
                 //player knockback
@@ -32,11 +43,6 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-        //find player
-        _targetPos = FindAnyObjectByType<Player>().GetComponent<Transform>();
-    }
     private void Update()
     {
         if(_currentCooldown >= 0)
@@ -44,7 +50,8 @@ public class Enemy : MonoBehaviour
             _currentCooldown -= Time.deltaTime;
         }
         //move toward player
-        transform.position = Vector2.MoveTowards(transform.position, _targetPos.transform.position, _moveSpeed * Time.deltaTime);
+        //transform.position = Vector2.MoveTowards(transform.position, _targetPos.transform.position, _moveSpeed * Time.deltaTime);
+        _enemyRB.position = Vector2.MoveTowards(_enemyRB.position, _playerRb.position, _moveSpeed * Time.deltaTime);
     }
     private IEnumerator Knockback(Rigidbody2D _rb)
     {
