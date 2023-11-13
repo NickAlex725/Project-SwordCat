@@ -136,7 +136,8 @@ public class Player : MonoBehaviour
                 //start cd
                 _currentDashCooldown = _dashCooldown;
                 //play animation
-                _catAnimator.SetTrigger("Dash");
+                //_catAnimator.SetTrigger("Dash");
+                _catAnimator.Play("SwordCat_Dash", 0, 0);
                 //dash coroutine
                 StartCoroutine(Dash());
             }
