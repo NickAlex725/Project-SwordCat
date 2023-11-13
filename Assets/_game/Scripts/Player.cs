@@ -12,6 +12,7 @@ public class Player : MonoBehaviour
     [SerializeField] float _dashCooldown;
     [SerializeField] InputAction _playerMovement;
     [SerializeField] InputAction _playerDash;
+    [SerializeField] Animator _catAnimator;
     private float _currentDashCooldown;
     private Rigidbody2D _rb;
     private Vector2 _moveDirection;
@@ -43,9 +44,20 @@ public class Player : MonoBehaviour
             _currentDashCooldown -= Time.deltaTime;
             _dashCD.fillAmount = 1 - (_currentDashCooldown / _dashCooldown);
         }
+
         //WASD movement
         _moveDirection = _playerMovement.ReadValue<Vector2>();
         _rb.velocity = new Vector2(_moveDirection.x * _moveSpeed, _moveDirection.y * _moveSpeed);
+
+        //play walking animation
+        if(_rb.velocity != Vector2.zero)
+        {
+            _catAnimator.SetFloat("speed", 1);
+        }
+        else
+        {
+            _catAnimator.SetFloat("speed", 0);
+        }
 
         //Dash attack
         _playerDash.performed += PlayerDash;
@@ -57,7 +69,11 @@ public class Player : MonoBehaviour
         {
             if (_currentDashCooldown <= 0)
             {
+                //start cd
                 _currentDashCooldown = _dashCooldown;
+                //play animation
+                _catAnimator.SetTrigger("Dash");
+                //dash coroutine
                 StartCoroutine(Dash());
             }
         }
