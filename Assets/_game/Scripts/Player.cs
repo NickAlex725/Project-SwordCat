@@ -108,6 +108,7 @@ public class Player : MonoBehaviour
             {
                 var enemyHealth = enemyCol.GetComponent<Health>();
                 enemyHealth.TakeDamage(_currentDamage);
+                _currentDashCooldown = 0; //reset cooldown
                 _canDoDamage = false;
             }
 
