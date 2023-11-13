@@ -29,7 +29,7 @@ public class Player : MonoBehaviour
     private Rigidbody2D _rb;
     private Vector2 _moveDirection;
     private int _currentDamage = 1;
-    private bool _canDoDamage;
+    private bool _canDoDamage; // ensures that you don't do multiple times a frame
     
 
     private void OnEnable()
