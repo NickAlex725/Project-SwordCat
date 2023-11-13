@@ -29,6 +29,7 @@ public class Player : MonoBehaviour
     private Rigidbody2D _rb;
     private Vector2 _moveDirection;
     private int _currentDamage = 1;
+    private bool _canDoDamage;
     
 
     private void OnEnable()
@@ -52,6 +53,7 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        //counting down cd if needed
         if (_currentDashCooldown > 0)
         {
             _currentDashCooldown -= Time.deltaTime;
@@ -81,10 +83,26 @@ public class Player : MonoBehaviour
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(_attackPoint.position, _attackRange);
         foreach (Collider2D enemy in hitEnemies)
         {
-            if (enemy.GetComponent<Enemy>())
+            if (enemy.GetComponent<Enemy>() && _canDoDamage)
             {
                 var enemyHealth = enemy.GetComponent<Health>();
                 enemyHealth.TakeDamage(_currentDamage);
+                _canDoDamage = false;
+
+                //checking if we killed the enemy
+                if(!enemy.isActiveAndEnabled)
+                {
+                    //get enemy level and check if we should increase player damage
+                    var enemyLevel = enemy.GetComponent<Enemy>();
+                    if(enemyLevel.GetEnemyLevel() == 1 && _currentDamage == 1)
+                    {
+                        _currentDamage = 101;
+                    }
+                    else if(enemyLevel.GetEnemyLevel() == 2 && _currentDamage == 101)
+                    {
+                        _currentDamage = 201;
+                    }
+                }
             }
         }
     }
@@ -114,6 +132,7 @@ public class Player : MonoBehaviour
             _rb.AddForce(_moveDirection * _dashForce, ForceMode2D.Force);
             yield return new WaitForSeconds(0.01f);
         }
+        _canDoDamage = true;
     }
 
     private void OnDrawGizmos()

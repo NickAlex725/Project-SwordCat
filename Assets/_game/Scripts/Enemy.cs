@@ -9,6 +9,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private int _damageAmount;
     [SerializeField] private float _damageCooldown;
     [SerializeField] private int _knockbackStrength;
+    [SerializeField] private int _enemyLevel;
     private float _currentCooldown;
     private Rigidbody2D _playerRb;
     private Health _playerHealth;
@@ -52,5 +53,10 @@ public class Enemy : MonoBehaviour
             _playerRb.AddForce((_rb.transform.position - transform.position).normalized * _knockbackStrength, ForceMode2D.Force);
             yield return new WaitForSeconds(0.01f);
         }
+    }
+
+    public int GetEnemyLevel()
+    {
+        return _enemyLevel;
     }
 }
