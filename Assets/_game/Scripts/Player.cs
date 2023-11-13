@@ -65,7 +65,7 @@ public class Player : MonoBehaviour
         }
 
         //counting down cd if needed
-        if (_currentDashCooldown > 0)
+        if (_currentDashCooldown >= 0)
         {
             _currentDashCooldown -= Time.deltaTime;
             _dashCD.fillAmount = 1 - (_currentDashCooldown / _dashCooldown);
