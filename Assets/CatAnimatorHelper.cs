@@ -5,6 +5,7 @@ using UnityEngine;
 public class CatAnimatorHelper : MonoBehaviour
 {
     private Player _player;
+    public Collider2D _attackCollider;
     // Start is called before the first frame update
     void Start()
     {
@@ -19,11 +20,13 @@ public class CatAnimatorHelper : MonoBehaviour
 
     public void StopAttacking()
     {
+        _attackCollider.enabled = false;
         _player._currentlyAttacking = false;
         _player.ResetAttackChain();
     }
     public void StartAttacking()
     {
+        _attackCollider.enabled = true;
         _player._currentlyAttacking = true;
     }
 

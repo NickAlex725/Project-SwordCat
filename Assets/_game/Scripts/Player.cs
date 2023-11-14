@@ -39,9 +39,10 @@ public class Player : MonoBehaviour
 
     [Header("Audio")]
     [SerializeField] AudioSource _sourceSwing;
+    [SerializeField] AudioSource _sourceSwing2;
+    [SerializeField] AudioSource _sourceSwing3;
     public AudioSource _sourceDamaged;
-    [SerializeField] AudioClip[] _clipSwing;
-    [SerializeField] AudioClip _clipDamaged;
+
     private void OnEnable()
     {
         //needed for input to work
@@ -101,7 +102,7 @@ public class Player : MonoBehaviour
     }
 
     //collision check particularly when dash attacking
-    void OnCollisionEnter2D(Collision2D col)
+    void OnTriggerEnter2D(Collider2D col)
     {
         if(col.gameObject.tag == "Enemy" && _currentlyAttacking)
         {
@@ -111,6 +112,7 @@ public class Player : MonoBehaviour
             {
                 case 1:
                     Destroy(enemy.gameObject);
+                    _currentDashCooldown = 0; //replenish cooldown
                     _attackChain2 = true;
                 break;
 
@@ -118,6 +120,7 @@ public class Player : MonoBehaviour
                     if(_attackChain2)
                     {
                         Destroy(enemy.gameObject);
+                        _currentDashCooldown = 0; //replenish cooldown
                         _attackChain3 = true;
                     }
                 break;
@@ -126,14 +129,12 @@ public class Player : MonoBehaviour
                     if(_attackChain2 & _attackChain3)
                     {
                         Destroy(enemy.gameObject);
+                        _currentDashCooldown = 0; //replenish cooldown
                         ResetAttackChain();
                     }
                 break;
-
-                default:
-                    return;
             }
-            _currentDashCooldown = 0; //replenish cooldown
+            _currentlyAttacking = false;
         }
     }
 
@@ -161,7 +162,17 @@ public class Player : MonoBehaviour
             //play animation
             _catAnimator.Play("SwordCat_Dash", 0, 0);
             //play audio
-            _sourceSwing.Play();
+            if(_attackChain2 && !_attackChain3)
+            {
+                _sourceSwing2.Play();
+            }
+            else if(_attackChain2 && _attackChain3)
+            {
+                _sourceSwing3.Play();
+            }else
+            {
+                _sourceSwing.Play();
+            }
             //dash coroutine
             StartCoroutine(Dash());
         }

@@ -29,6 +29,9 @@ public class Enemy : MonoBehaviour
         _player = FindAnyObjectByType<Player>().GetComponent<Player>();
         _playerRb = _player._rb;
         _playerAnimator = _player._catAnimator;
+
+        //start hissing occasionally
+        StartCoroutine(OccasionalHiss());
     }
     
     private void OnCollisionEnter2D(Collision2D collision)
@@ -40,7 +43,7 @@ public class Enemy : MonoBehaviour
             //_playerHealth.TakeDamage(_damageAmount); //uncomment after done debugging
             _playerAnimator.SetTrigger("isDamaged"); //play animation
             _currentCooldown = _damageCooldown;
-            _player._sourceDamaged.Play();
+            //_player._sourceDamaged.Play();
             
             //player knockback
             StartCoroutine(Knockback(_playerRb));
