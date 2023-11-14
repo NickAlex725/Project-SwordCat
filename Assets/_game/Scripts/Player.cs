@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -16,11 +18,10 @@ public class Player : MonoBehaviour
     [SerializeField] public float _dashCooldown;
 
     [Header("Combat Attributes")]
-    [SerializeField] Transform _attackPoint;
-    [SerializeField] float _attackRange;
+    
     [SerializeField] bool _attackChain2 = false;
     [SerializeField] bool _attackChain3 = false;
-    [SerializeField] Collider2D _attackHitbox;
+    private Vector2 _mouseDirection;
 
 
     [Header("Animator")]
@@ -35,6 +36,12 @@ public class Player : MonoBehaviour
     private Vector2 _moveDirection;
     private bool _facingLeft = true;
     public bool _currentlyAttacking = false;
+
+    [Header("Audio")]
+    [SerializeField] AudioSource _sourceSwing;
+    public AudioSource _sourceDamaged;
+    [SerializeField] AudioClip[] _clipSwing;
+    [SerializeField] AudioClip _clipDamaged;
     private void OnEnable()
     {
         //needed for input to work
@@ -56,12 +63,21 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+
+        Vector3 mouseRotation = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+        float fRotation = MathF.Atan2(mouseRotation.y, mouseRotation.x);// * Mathf.Rad2Deg;
+        float fX = Mathf.Cos(fRotation);
+        float fY = Mathf.Sin(fRotation);
+        _mouseDirection = new Vector2(fX, fY);
+        _mouseDirection.Normalize();
+
+
         //make sure player is facing the right way
-        if(_moveDirection.x > 0 && _facingLeft)
+        if(_moveDirection.x > 0 && _facingLeft || _mouseDirection.x > 0 && _facingLeft && _currentlyAttacking)
         {
             Flip();
         }
-        else if(_moveDirection.x < 0 && !_facingLeft)
+        else if(_moveDirection.x < 0 && !_facingLeft || _mouseDirection.x < 0 && !_facingLeft && _currentlyAttacking)
         {
             Flip();
         }
@@ -144,6 +160,8 @@ public class Player : MonoBehaviour
             _currentDashCooldown = _dashCooldown;
             //play animation
             _catAnimator.Play("SwordCat_Dash", 0, 0);
+            //play audio
+            _sourceSwing.Play();
             //dash coroutine
             StartCoroutine(Dash());
         }
@@ -153,7 +171,7 @@ public class Player : MonoBehaviour
         for (int i = 0; i < 25; i++)
         {
             //dashing
-            _rb.AddForce(_moveDirection * _dashForce, ForceMode2D.Force);
+            _rb.AddForce(_mouseDirection * _dashForce, ForceMode2D.Force);
             yield return new WaitForSeconds(0.01f);
         }
     }

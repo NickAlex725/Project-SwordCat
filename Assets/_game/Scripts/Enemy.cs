@@ -16,6 +16,10 @@ public class Enemy : MonoBehaviour
     private Animator _playerAnimator;
     private Player _player;
 
+    [Header("Audio")]
+    [SerializeField] AudioSource _sourceHiss;
+    [SerializeField] AudioSource _sourceBite;
+
     private void Start()
     {
         _enemyRB = gameObject.GetComponent<Rigidbody2D>();
@@ -36,6 +40,7 @@ public class Enemy : MonoBehaviour
             //_playerHealth.TakeDamage(_damageAmount); //uncomment after done debugging
             _playerAnimator.SetTrigger("isDamaged"); //play animation
             _currentCooldown = _damageCooldown;
+            _player._sourceDamaged.Play();
             
             //player knockback
             StartCoroutine(Knockback(_playerRb));
@@ -63,6 +68,12 @@ public class Enemy : MonoBehaviour
             _playerRb.AddForce((_rb.transform.position - transform.position).normalized * _knockbackStrength, ForceMode2D.Force);
             yield return new WaitForSeconds(0.01f);
         }
+    }
+
+    private IEnumerator OccasionalHiss()
+    {
+        yield return new WaitForSeconds(Random.Range(5, 16));
+        _sourceHiss.Play();
     }
 
     public int GetEnemyLevel()
