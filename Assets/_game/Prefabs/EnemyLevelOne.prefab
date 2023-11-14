@@ -103,7 +103,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _moveSpeed: 1
-  _damageAmount: 10
   _damageCooldown: 2
   _knockbackStrength: 500
   _enemyLevel: 1

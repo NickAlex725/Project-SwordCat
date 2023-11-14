@@ -102,8 +102,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfb3ee132ed4050439c61c09eab62354, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _moveSpeed: 1
-  _damageAmount: 10
+  _moveSpeed: 0.3
   _damageCooldown: 2
   _knockbackStrength: 500
   _enemyLevel: 3
