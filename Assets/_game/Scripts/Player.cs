@@ -13,30 +13,28 @@ public class Player : MonoBehaviour
     [Header("Player Attributes")]
     [SerializeField] float _moveSpeed;
     [SerializeField] int _dashForce;
-    [SerializeField] float _dashCooldown;
+    [SerializeField] public float _dashCooldown;
 
     [Header("Combat Attributes")]
     [SerializeField] Transform _attackPoint;
     [SerializeField] float _attackRange;
+    [SerializeField] bool _attackChain2 = false;
+    [SerializeField] bool _attackChain3 = false;
+    [SerializeField] Collider2D _attackHitbox;
+
 
     [Header("Animator")]
-    [SerializeField] Animator _catAnimator;
+    public Animator _catAnimator;
 
     [Header("Input Actions")]
     [SerializeField] InputAction _playerMovement;
     [SerializeField] InputAction _playerDash;
 
-    private float _currentDashCooldown;
-    private Rigidbody2D _rb;
+    public float _currentDashCooldown;
+    public Rigidbody2D _rb;
     private Vector2 _moveDirection;
-    private int _currentDamage = 1;
     private bool _facingLeft = true;
-    private bool _canDoDamage; // ensures that you don't do multiple times a frame
-
-    public bool attackChain2 = false;
-    public bool attackChain3 = false;
-    public Collider2D hitbox;
-
+    public bool _currentlyAttacking = false;
     private void OnEnable()
     {
         //needed for input to work
@@ -72,7 +70,7 @@ public class Player : MonoBehaviour
         if (_currentDashCooldown >= 0)
         {
             _currentDashCooldown -= Time.deltaTime;
-            _dashCD.fillAmount = 1 - (_currentDashCooldown / _dashCooldown);
+            _dashCD.fillAmount = _dashCooldown - (_currentDashCooldown / _dashCooldown);
         }
 
         //WASD movement
@@ -95,37 +93,48 @@ public class Player : MonoBehaviour
         _facingLeft = !_facingLeft;
     }
 
-    private void Attack()
+    //collision check particularly when dash attacking
+    void OnCollisionEnter2D(Collision2D col)
     {
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(_attackPoint.position, _attackRange);
-        foreach (Collider2D enemyCol in hitEnemies)
+        if(col.gameObject.tag == "Enemy" && _currentlyAttacking)
         {
-            var enemy = enemyCol.GetComponent<Enemy>();
-            if (enemyCol.GetComponent<Enemy>() && _canDoDamage)
-            {
-                var enemyHealth = enemyCol.GetComponent<Health>();
-                enemyHealth.TakeDamage(_currentDamage);
-                _currentDashCooldown = 0; //reset cooldown
-                _canDoDamage = false;
-            }
+            Enemy enemy = col.gameObject.GetComponent<Enemy>();
 
-            //checking if we killed the enemy
-            if(!enemyCol.isActiveAndEnabled)
+            switch(enemy.GetEnemyLevel())
             {
-                //get enemy level and check if we should increase player damage
-                if(enemy.GetEnemyLevel() == 1 && _currentDamage == 1)
-                {
-                    _currentDamage = 101;
-                }
-                else if(enemy.GetEnemyLevel() == 2 && _currentDamage == 101)
-                {
-                    _currentDamage = 201;
-                }
+                case 1:
+                    Destroy(enemy.gameObject);
+                    _attackChain2 = true;
+                break;
+
+                case 2:
+                    if(_attackChain2)
+                    {
+                        Destroy(enemy.gameObject);
+                        _attackChain3 = true;
+                    }
+                break;
+
+                case 3:
+                    if(_attackChain2 & _attackChain3)
+                    {
+                        Destroy(enemy.gameObject);
+                        ResetAttackChain();
+                    }
+                break;
+
+                default:
+                    return;
             }
+            _currentDashCooldown = 0; //replenish cooldown
         }
     }
 
-
+    public void ResetAttackChain()
+    {
+        _attackChain2 = false;
+        _attackChain3 = false;
+    }
 
     private void PlayerDash(InputAction.CallbackContext context)
     {
@@ -143,20 +152,9 @@ public class Player : MonoBehaviour
     {
         for (int i = 0; i < 25; i++)
         {
-            //attack while dashing
-            Attack();
             //dashing
             _rb.AddForce(_moveDirection * _dashForce, ForceMode2D.Force);
             yield return new WaitForSeconds(0.01f);
         }
-        _canDoDamage = true;
-    }
-
-    private void OnDrawGizmos()
-    {
-        //visual for attack circle
-        if (_attackPoint == null)
-            return;
-        Gizmos.DrawWireSphere(_attackPoint.position, _attackRange);
     }
 }

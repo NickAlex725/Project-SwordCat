@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    private Transform _targetPos;
     [SerializeField] private int _moveSpeed;
     [SerializeField] private int _damageAmount;
     [SerializeField] private float _damageCooldown;
@@ -15,34 +14,31 @@ public class Enemy : MonoBehaviour
     private Health _playerHealth;
     private Rigidbody2D _enemyRB;
     private Animator _playerAnimator;
+    private Player _player;
 
     private void Start()
     {
         _enemyRB = gameObject.GetComponent<Rigidbody2D>();
-        //find player location
-        _targetPos = FindAnyObjectByType<Player>().GetComponent<Transform>();
-
 
         //get player components
-        _playerRb = FindAnyObjectByType<Player>().GetComponent<Rigidbody2D>();
         _playerHealth = FindAnyObjectByType<Player>().GetComponent<Health>();
-        _playerAnimator = FindAnyObjectByType<Player>().GetComponentInChildren<Animator>();
+        _player = FindAnyObjectByType<Player>().GetComponent<Player>();
+        _playerRb = _player._rb;
+        _playerAnimator = _player._catAnimator;
     }
     
     private void OnCollisionEnter2D(Collision2D collision)
     {
         //_playerRb.velocity = Vector2.zero; //stops walking animation
-        if (collision.gameObject.tag == "Player")
+        if (collision.gameObject.tag == "Player" && _currentCooldown <= 0 && !_player._currentlyAttacking)
         {
-            if (_currentCooldown <= 0)
-            {
-                //do damage
-                _playerHealth.TakeDamage(_damageAmount);
-                _playerAnimator.Play("SwordCat_Damaged"); //play animation
-                _currentCooldown = _damageCooldown;
-                //player knockback
-                StartCoroutine(Knockback(_playerRb));
-            }
+            //do damage
+            //_playerHealth.TakeDamage(_damageAmount); //uncomment after done debugging
+            _playerAnimator.SetTrigger("isDamaged"); //play animation
+            _currentCooldown = _damageCooldown;
+            
+            //player knockback
+            StartCoroutine(Knockback(_playerRb));
         }
     }
 
