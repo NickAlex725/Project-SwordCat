@@ -13,7 +13,7 @@ GameObject:
   m_Layer: 0
   m_Name: EnemySpawner
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -45,7 +45,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemiesList:
-  - {fileID: 7635677374994760886, guid: d9ed0952f3a140f4492cc929d3675b0c, type: 3}
-  - {fileID: 2660059561821156067, guid: a1845113a2b1fe54694c161e8994c242, type: 3}
-  - {fileID: 5277063001714625706, guid: 3bd9d9158dfa62343983b05b82a2b986, type: 3}
-  _spawnRate: 5
+  - {fileID: 8208448011831463545, guid: b51422c8e70267e4db76a9befa46ba57, type: 3}
+  - {fileID: 8208448011831463545, guid: b51422c8e70267e4db76a9befa46ba57, type: 3}
+  - {fileID: 8208448011831463545, guid: b51422c8e70267e4db76a9befa46ba57, type: 3}
+  - {fileID: 8208448011831463545, guid: b51422c8e70267e4db76a9befa46ba57, type: 3}
+  - {fileID: 8208448011831463545, guid: b51422c8e70267e4db76a9befa46ba57, type: 3}
+  - {fileID: 8208448011831463545, guid: b51422c8e70267e4db76a9befa46ba57, type: 3}
+  - {fileID: 4283464020309776310, guid: 964fd2752615b5642bf7da19502503cc, type: 3}
+  - {fileID: 4283464020309776310, guid: 964fd2752615b5642bf7da19502503cc, type: 3}
+  - {fileID: 4283464020309776310, guid: 964fd2752615b5642bf7da19502503cc, type: 3}
+  - {fileID: 5623138719733628200, guid: a1265e2aba0d86b4c9b2187ef1db9c82, type: 3}
+  - {fileID: 5623138719733628200, guid: a1265e2aba0d86b4c9b2187ef1db9c82, type: 3}
+  _spawnRate: 7

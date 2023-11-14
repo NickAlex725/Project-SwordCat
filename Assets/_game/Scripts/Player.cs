@@ -63,21 +63,12 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-
-        Vector3 mouseRotation = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
-        float fRotation = MathF.Atan2(mouseRotation.y, mouseRotation.x);// * Mathf.Rad2Deg;
-        float fX = Mathf.Cos(fRotation);
-        float fY = Mathf.Sin(fRotation);
-        _mouseDirection = new Vector2(fX, fY);
-        _mouseDirection.Normalize();
-
-
         //make sure player is facing the right way
-        if(_moveDirection.x > 0 && _facingLeft || _mouseDirection.x > 0 && _facingLeft && _currentlyAttacking)
+        if(_moveDirection.x > 0 && _facingLeft)
         {
             Flip();
         }
-        else if(_moveDirection.x < 0 && !_facingLeft || _mouseDirection.x < 0 && !_facingLeft && _currentlyAttacking)
+        else if(_moveDirection.x < 0 && !_facingLeft)
         {
             Flip();
         }
@@ -156,6 +147,15 @@ public class Player : MonoBehaviour
     {
         if(context.ReadValueAsButton() && _currentDashCooldown <= 0)
         {
+            #region Function to calculate mouse position and direction | For dash purposes
+            Vector3 mouseRotation = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+            float fRotation = MathF.Atan2(mouseRotation.y, mouseRotation.x);
+            float fX = Mathf.Cos(fRotation);
+            float fY = Mathf.Sin(fRotation);
+            _mouseDirection = new Vector2(fX, fY);
+            _mouseDirection.Normalize();
+            #endregion
+
             //start cd
             _currentDashCooldown = _dashCooldown;
             //play animation
@@ -168,6 +168,16 @@ public class Player : MonoBehaviour
     }
     private IEnumerator Dash()
     {
+        //make sure player is facing the right way
+        if(_mouseDirection.x > 0 && _facingLeft)
+        {
+            Flip();
+        }
+        else if(_mouseDirection.x < 0 && !_facingLeft)
+        {
+            Flip();
+        }
+        
         for (int i = 0; i < 25; i++)
         {
             //dashing
