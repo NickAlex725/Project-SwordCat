@@ -44,16 +44,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3b86bd1b24107b4c808bb896a55d165, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enemiesList:
-  - {fileID: 8208448011831463545, guid: b51422c8e70267e4db76a9befa46ba57, type: 3}
-  - {fileID: 8208448011831463545, guid: b51422c8e70267e4db76a9befa46ba57, type: 3}
-  - {fileID: 8208448011831463545, guid: b51422c8e70267e4db76a9befa46ba57, type: 3}
-  - {fileID: 8208448011831463545, guid: b51422c8e70267e4db76a9befa46ba57, type: 3}
-  - {fileID: 8208448011831463545, guid: b51422c8e70267e4db76a9befa46ba57, type: 3}
-  - {fileID: 8208448011831463545, guid: b51422c8e70267e4db76a9befa46ba57, type: 3}
-  - {fileID: 4283464020309776310, guid: 964fd2752615b5642bf7da19502503cc, type: 3}
-  - {fileID: 4283464020309776310, guid: 964fd2752615b5642bf7da19502503cc, type: 3}
-  - {fileID: 4283464020309776310, guid: 964fd2752615b5642bf7da19502503cc, type: 3}
-  - {fileID: 5623138719733628200, guid: a1265e2aba0d86b4c9b2187ef1db9c82, type: 3}
-  - {fileID: 5623138719733628200, guid: a1265e2aba0d86b4c9b2187ef1db9c82, type: 3}
-  _spawnRate: 7
+  _enemiesList: []
+  _spawnPerX: 1

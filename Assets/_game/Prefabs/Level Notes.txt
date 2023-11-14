@@ -1,0 +1,1 @@
+GoToNextLevel is what the player will walk towards to get to the next level, the collider is disabled until the current level is finished.

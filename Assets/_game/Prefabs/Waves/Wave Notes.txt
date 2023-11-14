@@ -1,0 +1,7 @@
+Feel free to name the prefabs as you see fit, the ones we currently have in the folder are just examples/ideas
+
+For when you enter a new level/area, it would be better to place the enemies inside the play area.
+
+But for when you want to spawn new enemies/waves, it would be better to place the enemies outside the play area so it looks like they naturally wandered in instead of suddenly spawning out of nowhere
+
+Individual enemies will spawn where you have placed the Spawner, but Wave Enemies will spawn exactly as they are located in the prefab. 
