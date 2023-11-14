@@ -1,5 +1,7 @@
 For the Enemy Spawner, you can choose to have them spawn in the order of the List or spawn them randomly from the List.
 
+If you spawn them in order, it will follow the order of the List from Bottom to Top.
+
 You can choose to either spawn individual enemies or spawn waves, I recommend only filling in one of these lists. If you want to spawn both individual enemies AND waves, you should make seperate spawners for those.
 
 You can adjust the seconds between each spawn, and how many times you want it to spawn.
