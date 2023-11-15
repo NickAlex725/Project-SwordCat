@@ -6,14 +6,20 @@ public class Enemy : MonoBehaviour
 {
     [SerializeField] private float _moveSpeed;
     [SerializeField] private float _damageCooldown;
+    [SerializeField] private int _damageAmount = 10;
     [SerializeField] private int _knockbackStrength;
     [SerializeField] private int _enemyLevel;
     private float _currentCooldown;
     private Rigidbody2D _playerRb;
     private Health _playerHealth;
     private Rigidbody2D _enemyRB;
+    private Collider2D _enemyCollider;
     private Animator _playerAnimator;
     private Player _player;
+
+    public Animator _animator;
+    public Material[] _materials;
+    private Color _initColor;
 
     [Header("Audio")]
     [SerializeField] AudioSource _sourceHiss;
@@ -21,7 +27,10 @@ public class Enemy : MonoBehaviour
 
     private void Start()
     {
+        _initColor = _materials[0].color;
         _enemyRB = gameObject.GetComponent<Rigidbody2D>();
+        _animator = gameObject.GetComponent<Animator>();
+        _enemyCollider = gameObject.GetComponent<Collider2D>();
 
         //get player components
         _playerHealth = FindAnyObjectByType<Player>().GetComponent<Health>();
@@ -39,10 +48,10 @@ public class Enemy : MonoBehaviour
         if (collision.gameObject.tag == "Player" && _currentCooldown <= 0 && !_player._currentlyAttacking)
         {
             //do damage
-            //_playerHealth.TakeDamage(_damageAmount); //uncomment after done debugging
+            _playerHealth.TakeDamage(_damageAmount); //uncomment after done debugging
             _playerAnimator.SetTrigger("isDamaged"); //play animation
             _currentCooldown = _damageCooldown;
-            //_player._sourceDamaged.Play();
+            _player._sourceDamaged.Play();
             
             //player knockback
             StartCoroutine(Knockback(_playerRb));
@@ -82,4 +91,35 @@ public class Enemy : MonoBehaviour
     {
         return _enemyLevel;
     }
+
+    #region Health Indicator using color flickers
+    public void ColorOff()
+    {
+        for(int i = 0; i < _materials.Length; i++)
+        {
+            _materials[i].color = _initColor;
+        }
+    }
+
+    public void ColorOn()
+    {
+        for(int i = 0; i < _materials.Length; i++)
+        {
+            float green = 0.4f;
+
+            _materials[i].color = new Color(1f, green, 0.4f);
+        }
+    }
+
+    public void CheckDie() //need a death animation to execute this
+    {
+            Destroy(gameObject);
+    }
+
+    public void Disable() //Checks player health and disables enemy script before CheckDie deletes the gameobject
+    {
+        this.enabled = false;
+        _enemyCollider.enabled = false;
+    }
+    #endregion
 }

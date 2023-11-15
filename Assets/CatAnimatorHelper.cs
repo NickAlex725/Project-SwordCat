@@ -6,16 +6,13 @@ public class CatAnimatorHelper : MonoBehaviour
 {
     private Player _player;
     public Collider2D _attackCollider;
+    private Health _playerHealth;
+    public Material[] _materials;
     // Start is called before the first frame update
     void Start()
     {
         _player = FindAnyObjectByType<Player>().GetComponent<Player>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        _playerHealth = FindAnyObjectByType<Player>().GetComponent<Health>();
     }
 
     public void StopAttacking()
@@ -39,4 +36,56 @@ public class CatAnimatorHelper : MonoBehaviour
     {
         _player.ResetAttackChain();
     }
+
+    #region Health Indicator using color flickers
+    public void ColorOff()
+    {
+        for(int i = 0; i < _materials.Length; i++)
+        {
+            _materials[i].color = Color.white;
+        }
+    }
+    float green;
+    public void ColorOn()
+    {
+        for(int i = 0; i < _materials.Length; i++)
+        {
+            if(_playerHealth._currentHealth >= 70)
+            {
+                green  = 0.8f;
+            }
+            else if(_playerHealth._currentHealth >= 40 && _playerHealth._currentHealth < 70)
+            {
+                green  = 0.6f;
+            }
+            else if(_playerHealth._currentHealth < 40)
+            {
+                green  = 0.4f;
+            }
+            else
+            {
+                return;
+            }
+
+            _materials[i].color = new Color(1f, green, 0.4f);
+        }
+    }
+
+    public void CheckDie()
+    {
+        if(_playerHealth._currentHealth <= 0)
+        {
+            _playerHealth.Die();
+        }
+    }
+
+    public void CheckHealthAndDisable() //Checks player health and disables player script before CheckDie deletes the gameobject
+    {
+        if(_playerHealth._currentHealth <= 0)
+        {
+            _player._playerMovement.Disable();
+            _player._playerDash.Disable();
+        }
+    }
+    #endregion
 }
