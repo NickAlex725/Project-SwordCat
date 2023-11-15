@@ -8,6 +8,7 @@ public class EnemyCheck : MonoBehaviour
     [SerializeField] Enemy _levelTwoEnemy;
     [SerializeField] Enemy _levelThreeEnemy;
     [SerializeField] float _checkInterval;
+    [SerializeField] GameObject _backUpSpawner;
 
     private int _numberOfLevelOne;
     private int _numberOfLevelTwo;
@@ -68,12 +69,15 @@ public class EnemyCheck : MonoBehaviour
         if (_numberOfLevelThree > _numberOfLevelTwo && _numberOfLevelTwo > _numberOfLevelOne)
         {
             Debug.Log("need more level 2 and 1 enemies");
+            Instantiate(_levelOneEnemy, _backUpSpawner.transform.position, Quaternion.identity);
+            Instantiate(_levelTwoEnemy, _backUpSpawner.transform.position, Quaternion.identity);
         }
-        else if (_numberOfLevelTwo > _numberOfLevelOne && _numberOfLevelThree !> _numberOfLevelTwo)
+        else if (_numberOfLevelTwo > _numberOfLevelOne)
         {
             Debug.Log("need more level 1 enemies");
+            Instantiate(_levelOneEnemy, _backUpSpawner.transform.position, Quaternion.identity);
         }
-        else if (_numberOfLevelTwo >= 0 && _numberOfLevelOne <= 0)
+        else if (_numberOfLevelTwo > _numberOfLevelThree && _numberOfLevelTwo > _numberOfLevelOne)
         {
             Debug.Log("level should be beatable");
         }
