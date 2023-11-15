@@ -6,18 +6,18 @@ using UnityEngine.SceneManagement;
 
 public class LevelTransitioner : MonoBehaviour
 {
+    [SerializeField] GameObject _level1Prefab;
+    [SerializeField] GameObject _level2Prefab;
+    [SerializeField] GameObject _level3Prefab;
+
+    private GameObject _currentLevel;
+    private int _levelCount = 1;
     public bool _isLastLevel;
 
     // Start is called before the first frame update
     void Start()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        _level1Prefab = _currentLevel;
     }
 
     void OnTriggerEnter2D(Collider2D playerCol)
@@ -25,7 +25,8 @@ public class LevelTransitioner : MonoBehaviour
         if(_isLastLevel) //win if on last level
         {
             SceneManager.LoadScene("WinCutscene");
-        }else
+        }
+        else
         {
             //run fade to black animation (optional)
 
@@ -35,8 +36,28 @@ public class LevelTransitioner : MonoBehaviour
             {
                 Destroy(waves[i]);
             }
-            //spawn new level prefab
+            _levelCount++;
 
+            //spawn new level prefab
+            _currentLevel = null;
+            if(_levelCount == 1)
+            {
+                _currentLevel = _level1Prefab;
+                _level1Prefab.SetActive(true);
+            }
+            else if (_levelCount == 2)
+            {
+                _currentLevel = _level2Prefab;
+                _level1Prefab.SetActive(false);
+                _level2Prefab.SetActive(true);
+            }
+            else if (_levelCount == 3)
+            {
+                _currentLevel = _level3Prefab;
+                _level2Prefab.SetActive(false);
+                _level3Prefab.SetActive(true);
+                _isLastLevel = true;
+            }
             //make player come in from opposite screen
         }
     }

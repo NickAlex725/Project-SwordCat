@@ -8,6 +8,7 @@ public class EnemyCheck : MonoBehaviour
     [SerializeField] Enemy _levelTwoEnemy;
     [SerializeField] Enemy _levelThreeEnemy;
     [SerializeField] float _checkInterval;
+    [SerializeField] GameObject _nextLevelTransition;
 
     private int _numberOfLevelOne;
     private int _numberOfLevelTwo;
@@ -16,10 +17,15 @@ public class EnemyCheck : MonoBehaviour
     private void Start()
     {
         _currentCheckTime = _checkInterval;
+        _nextLevelTransition.SetActive(false);
     }
     private void Update()
     {
-        if(_currentCheckTime <= 0)
+        if (_numberOfLevelOne <= 0 && _numberOfLevelTwo <= 0 && _numberOfLevelThree <= 0)
+        {
+            _nextLevelTransition.SetActive(true);
+        }
+        if (_currentCheckTime <= 0)
         {
             IsLevelPossibleCheck();
 
