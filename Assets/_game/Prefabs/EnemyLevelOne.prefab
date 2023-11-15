@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6234685597349406994}
   - component: {fileID: 4546107743587340149}
+  - component: {fileID: -7770231003820046203}
   - component: {fileID: 7575557296990659830}
   - component: {fileID: 8721325740252574078}
   - component: {fileID: 8770421083534379221}
@@ -58,7 +59,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 582430d5309ccd049812ad4ca90090cb, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -90,6 +91,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &-7770231003820046203
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8208448011831463545}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 39da696d8703cfb4ea28aaa184bd34f1, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &7575557296990659830
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -104,8 +126,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _moveSpeed: 1
   _damageCooldown: 2
+  _damageAmount: 10
   _knockbackStrength: 500
   _enemyLevel: 1
+  _animator: {fileID: 0}
+  _materials:
+  - {fileID: 2100000, guid: 582430d5309ccd049812ad4ca90090cb, type: 2}
   _sourceHiss: {fileID: 4902218715595155049}
   _sourceBite: {fileID: 7138506759315426373}
 --- !u!114 &8721325740252574078

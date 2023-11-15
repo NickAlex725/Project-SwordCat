@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Health : MonoBehaviour
 {
     [SerializeField] int _maxHealth;
+    private int _minHealth = 0;
 
     public int _currentHealth;
 
@@ -25,10 +27,11 @@ public class Health : MonoBehaviour
     public void TakeDamage(int damageAmount)
     {
         _currentHealth -= damageAmount;
-        if(_currentHealth <= 0)
+        _currentHealth = Mathf.Clamp(_currentHealth, _minHealth, _maxHealth); //makes sure health doesnt go past the max and min
+        /*if(_currentHealth <= 0)
         {
             Die();
-        }
+        }*/ //this is now called in the Damaged animation
     }
 
     public void Die()
