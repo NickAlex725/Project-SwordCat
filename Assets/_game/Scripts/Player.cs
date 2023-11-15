@@ -28,8 +28,8 @@ public class Player : MonoBehaviour
     public Animator _catAnimator;
 
     [Header("Input Actions")]
-    [SerializeField] InputAction _playerMovement;
-    [SerializeField] InputAction _playerDash;
+    public InputAction _playerMovement;
+    public InputAction _playerDash;
 
     public float _currentDashCooldown;
     public Rigidbody2D _rb;
@@ -107,11 +107,12 @@ public class Player : MonoBehaviour
         if(col.gameObject.tag == "Enemy" && _currentlyAttacking)
         {
             Enemy enemy = col.gameObject.GetComponent<Enemy>();
+            Health enemyHealth = col.gameObject.GetComponent<Health>();
 
             switch(enemy.GetEnemyLevel())
             {
                 case 1:
-                    Destroy(enemy.gameObject);
+                    enemy._animator.Play("Die");
                     _currentDashCooldown = 0; //replenish cooldown
                     _attackChain2 = true;
                 break;
@@ -119,7 +120,7 @@ public class Player : MonoBehaviour
                 case 2:
                     if(_attackChain2)
                     {
-                        Destroy(enemy.gameObject);
+                        enemy._animator.Play("Die");
                         _currentDashCooldown = 0; //replenish cooldown
                         _attackChain3 = true;
                     }
@@ -128,13 +129,13 @@ public class Player : MonoBehaviour
                 case 3:
                     if(_attackChain2 & _attackChain3)
                     {
-                        Destroy(enemy.gameObject);
+                        enemy._animator.Play("Die");
                         _currentDashCooldown = 0; //replenish cooldown
                         ResetAttackChain();
                     }
                 break;
             }
-            _currentlyAttacking = false;
+           _currentlyAttacking = false;
         }
     }
 
@@ -160,7 +161,7 @@ public class Player : MonoBehaviour
             //start cd
             _currentDashCooldown = _dashCooldown;
             //play animation
-            _catAnimator.Play("SwordCat_Dash", 0, 0);
+            _catAnimator.SetTrigger("Dash");
             //play audio
             if(_attackChain2 && !_attackChain3)
             {

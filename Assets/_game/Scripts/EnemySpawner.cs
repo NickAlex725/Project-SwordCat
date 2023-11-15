@@ -11,6 +11,10 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private float _spawnPerX;
     [SerializeField] private int _spawnXTimes;
 
+    private int _numberOfLevel3;
+    private int _numberOfLevel2;
+    private int _numberOfLevel1;
+
     private float _currentSpawnTimer;
     private void OnEnable()
     {
@@ -27,7 +31,9 @@ public class EnemySpawner : MonoBehaviour
                 int rand = Random.Range(0, _enemiesList.Length);
                 GameObject objectToSpawn = _enemiesList[rand];
                 Instantiate(objectToSpawn, transform.position, Quaternion.identity);
-            }else if(_enemiesList.Length > 0 && _spawnInOrder && _spawnXTimes > 0)
+
+            }
+            else if(_enemiesList.Length > 0 && _spawnInOrder && _spawnXTimes > 0)
             {
                 GameObject objectToSpawn = _enemiesList[_spawnXTimes-1];
                 Instantiate(objectToSpawn, transform.position, Quaternion.identity);
@@ -46,6 +52,7 @@ public class EnemySpawner : MonoBehaviour
                 Instantiate(objectToSpawn);
                 _spawnXTimes--;
             }
+
             _currentSpawnTimer = _spawnPerX;
         }
         else
@@ -53,5 +60,4 @@ public class EnemySpawner : MonoBehaviour
             _currentSpawnTimer -= Time.deltaTime;
         }
     }
-
 }
