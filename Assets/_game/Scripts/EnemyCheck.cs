@@ -66,7 +66,8 @@ public class EnemyCheck : MonoBehaviour
 
     private void IsLevelPossibleCheck()
     {
-        if (_numberOfLevelThree > _numberOfLevelTwo && _numberOfLevelTwo > _numberOfLevelOne)
+        if (_numberOfLevelThree > _numberOfLevelTwo && _numberOfLevelTwo > _numberOfLevelOne ||
+            _numberOfLevelThree > _numberOfLevelTwo && _numberOfLevelTwo == _numberOfLevelOne)
         {
             Debug.Log("need more level 2 and 1 enemies");
             Instantiate(_levelOneEnemy, _backUpSpawner.transform.position, Quaternion.identity);
