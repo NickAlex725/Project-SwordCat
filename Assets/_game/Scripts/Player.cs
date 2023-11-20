@@ -36,6 +36,7 @@ public class Player : MonoBehaviour
     private Vector2 _moveDirection;
     private bool _facingLeft = true;
     public bool _currentlyAttacking = false;
+    public bool _invincible;
 
     [Header("Audio")]
     [SerializeField] AudioSource _sourceSwing;
@@ -115,6 +116,7 @@ public class Player : MonoBehaviour
                     enemy._animator.Play("Die");
                     _currentDashCooldown = 0; //replenish cooldown
                     _attackChain2 = true;
+                    _invincible = true;
                 break;
 
                 case 2:
@@ -123,6 +125,7 @@ public class Player : MonoBehaviour
                         enemy._animator.Play("Die");
                         _currentDashCooldown = 0; //replenish cooldown
                         _attackChain3 = true;
+                        _invincible = true;
                     }
                 break;
 
@@ -132,6 +135,7 @@ public class Player : MonoBehaviour
                         enemy._animator.Play("Die");
                         _currentDashCooldown = 0; //replenish cooldown
                         ResetAttackChain();
+                        _invincible = true;
                     }
                 break;
             }

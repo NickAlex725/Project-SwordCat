@@ -45,7 +45,7 @@ public class Enemy : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         //_playerRb.velocity = Vector2.zero; //stops walking animation
-        if (collision.gameObject.tag == "Player" && _currentCooldown <= 0 && !_player._currentlyAttacking)
+        if (collision.gameObject.tag == "Player" && _currentCooldown <= 0 && !_player._invincible)
         {
             //do damage
             _playerHealth.TakeDamage(_damageAmount); //uncomment after done debugging

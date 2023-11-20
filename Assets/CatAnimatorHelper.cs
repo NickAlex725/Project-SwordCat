@@ -14,7 +14,15 @@ public class CatAnimatorHelper : MonoBehaviour
         _player = FindAnyObjectByType<Player>().GetComponent<Player>();
         _playerHealth = FindAnyObjectByType<Player>().GetComponent<Health>();
     }
+    public void InvincibleOn()
+    {
+        _player._invincible = true;
+    }
 
+    public void InvincibleOff()
+    {
+        _player._invincible = false;
+    }
     public void StopAttacking()
     {
         _attackCollider.enabled = false;
@@ -25,6 +33,7 @@ public class CatAnimatorHelper : MonoBehaviour
     {
         _attackCollider.enabled = true;
         _player._currentlyAttacking = true;
+        InvincibleOn();
     }
 
     public void ResetCooldown()
